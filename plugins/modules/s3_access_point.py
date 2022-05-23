@@ -20,13 +20,13 @@ options:
     bucket:
         description:
         - The name of the bucket that you want to associate this Access Point with.
-        required: true
         type: str
     name:
         description:
         - The name you want to assign to this Access Point.
         - If you dont specify a name, AWS CloudFormation generates a unique ID and
             uses that ID for the access point name.
+        required: true
         type: str
     policy:
         description:
@@ -182,8 +182,8 @@ def main():
         ),
     )
 
-    argument_spec["name"] = {"type": "str"}
-    argument_spec["bucket"] = {"type": "str", "required": True}
+    argument_spec["name"] = {"type": "str", "required": True}
+    argument_spec["bucket"] = {"type": "str"}
     argument_spec["vpc_configuration"] = {
         "type": "dict",
         "options": {"vpc_id": {"type": "str"}},
@@ -210,11 +210,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["bucket"], True],
-        ["state", "absent", [], True],
-        ["state", "get", [], True],
-    ]
+    required_if = [["state", "present", ["bucket"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

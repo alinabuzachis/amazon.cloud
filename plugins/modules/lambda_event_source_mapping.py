@@ -14,7 +14,8 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 module: lambda_event_source_mapping
 short_description: Create a mapping between an event source and an AWS Lambda function
-description: Create a mapping between an event source and an AWS Lambda function.
+description: Create a mapping between an event source and an AWS Lambda function (list,
+    create, update, describe, delete).
 options:
     batch_size:
         description:
@@ -69,7 +70,6 @@ options:
     function_name:
         description:
         - The name of the Lambda function.
-        required: true
         type: str
     function_response_types:
         choices:
@@ -81,6 +81,7 @@ options:
     id:
         description:
         - Event Source Mapping Identifier UUID.
+        required: true
         type: str
     maximum_batching_window_in_seconds:
         description:
@@ -241,7 +242,7 @@ def main():
         ),
     )
 
-    argument_spec["id"] = {"type": "str"}
+    argument_spec["id"] = {"type": "str", "required": True}
     argument_spec["batch_size"] = {"type": "int"}
     argument_spec["bisect_batch_on_function_error"] = {"type": "bool"}
     argument_spec["destination_config"] = {
@@ -262,7 +263,7 @@ def main():
             }
         },
     }
-    argument_spec["function_name"] = {"type": "str", "required": True}
+    argument_spec["function_name"] = {"type": "str"}
     argument_spec["maximum_batching_window_in_seconds"] = {"type": "int"}
     argument_spec["maximum_record_age_in_seconds"] = {"type": "int"}
     argument_spec["maximum_retry_attempts"] = {"type": "int"}
@@ -316,11 +317,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["function_name"], True],
-        ["state", "absent", [], True],
-        ["state", "get", [], True],
-    ]
+    required_if = [["state", "present", ["function_name"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

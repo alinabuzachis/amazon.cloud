@@ -96,6 +96,7 @@ options:
     name:
         description:
         - The unique name to give to your cluster.
+        required: true
         type: str
     purge_tags:
         default: true
@@ -106,7 +107,6 @@ options:
     resources_vpc_config:
         description:
         - An object representing the VPC configuration to use for an Amazon EKS cluster.
-        required: true
         suboptions:
             endpoint_private_access:
                 description:
@@ -158,7 +158,6 @@ options:
                     subnets to allow communication between your nodes and the Kubernetes
                     control plane.
                 elements: str
-                required: true
                 type: list
         type: dict
     role_arn:
@@ -166,7 +165,6 @@ options:
         - The Amazon Resource Name (ARN) of the IAM role that provides permissions
             for the Kubernetes control plane to make calls to AWS API operations on
             your behalf.
-        required: true
         type: str
     state:
         choices:
@@ -298,7 +296,7 @@ def main():
             }
         },
     }
-    argument_spec["name"] = {"type": "str"}
+    argument_spec["name"] = {"type": "str", "required": True}
     argument_spec["resources_vpc_config"] = {
         "type": "dict",
         "options": {
@@ -306,11 +304,10 @@ def main():
             "endpoint_public_access": {"type": "bool"},
             "public_access_cidrs": {"type": "list", "elements": "str"},
             "security_group_ids": {"type": "list", "elements": "str"},
-            "subnet_ids": {"type": "list", "required": True, "elements": "str"},
+            "subnet_ids": {"type": "list", "elements": "str"},
         },
-        "required": True,
     }
-    argument_spec["role_arn"] = {"type": "str", "required": True}
+    argument_spec["role_arn"] = {"type": "str"}
     argument_spec["version"] = {"type": "str"}
     argument_spec["tags"] = {
         "type": "dict",
@@ -326,11 +323,7 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["role_arn", "name", "resources_vpc_config"], True],
-        ["state", "absent", ["name"], True],
-        ["state", "get", ["name"], True],
-    ]
+    required_if = [["state", "present", ["role_arn", "resources_vpc_config"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

@@ -12,87 +12,54 @@ __metaclass__ = type
 
 
 DOCUMENTATION = r"""
-module: rdsdb_proxy
-short_description: Create and manage DB proxies
-description: Creates and manage DB proxies (list, create, update, describe, delete).
+module: eks_fargate_profile
+short_description: []
+description: []
 options:
-    auth:
+    cluster_name:
         description:
-        - The authorization mechanism that the proxy uses.
-        elements: dict
-        suboptions:
-            auth_scheme:
-                choices:
-                - SECRETS
-                description:
-                - The type of authentication that the proxy uses for connections from
-                    the proxy to the underlying database.
-                type: str
-            description:
-                description:
-                - A user-specified description about the authentication used by a
-                    proxy to log in as a specific database user.
-                type: str
-            iam_auth:
-                choices:
-                - DISABLED
-                - REQUIRED
-                description:
-                - Whether to require or disallow AWS Identity and Access Management
-                    (IAM) authentication for connections to the proxy.
-                type: str
-            secret_arn:
-                description:
-                - The Amazon Resource Name (ARN) representing the secret that the
-                    proxy uses to authenticate to the RDS DB instance or Aurora DB
-                    cluster.
-                - These secrets are stored within Amazon Secrets Manager.
-                type: str
-            user_name:
-                description:
-                - The name of the database user to which the proxy connects.
-                type: str
-        type: list
-    db_proxy_name:
-        description:
-        - The identifier for the proxy.
-        - This name must be unique for all proxies owned by your AWS account in the
-            specified AWS Region.
+        - Name of the Cluster
         required: true
         type: str
-    debug_logging:
+    fargate_profile_name:
         description:
-        - Whether the proxy includes detailed information about SQL statements in
-            its logs.
-        type: bool
-    engine_family:
-        choices:
-        - MYSQL
-        - POSTGRESQL
-        description:
-        - The kinds of databases that the proxy can connect to.
+        - Name of I(fargate_profile)
+        required: true
         type: str
-    idle_client_timeout:
+    pod_execution_role_arn:
         description:
-        - The number of seconds that a connection to the proxy can be inactive before
-            the proxy disconnects it.
-        type: int
+        - The IAM policy arn for pods
+        type: str
     purge_tags:
         default: true
         description:
         - Remove tags not listed in I(tags).
         required: false
         type: bool
-    require_tls:
+    selectors:
         description:
-        - A Boolean parameter that specifies whether Transport Layer Security (TLS)
-            encryption is required for connections to the proxy.
-        type: bool
-    role_arn:
-        description:
-        - The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access
-            secrets in AWS Secrets Manager.
-        type: str
+        - Not Provived.
+        elements: dict
+        suboptions:
+            labels:
+                description:
+                - A key-value pair to associate with a pod.
+                elements: dict
+                suboptions:
+                    key:
+                        description:
+                        - The key name of the label.
+                        type: str
+                    value:
+                        description:
+                        - The value for the label.
+                        type: str
+                type: list
+            namespace:
+                description:
+                - Not Provived.
+                type: str
+        type: list
     state:
         choices:
         - present
@@ -109,6 +76,11 @@ options:
         - I(state=list) get all the existing resources.
         - I(state=describe) or I(state=get) retrieves information on an existing resource.
         type: str
+    subnets:
+        description:
+        - Not Provived.
+        elements: str
+        type: list
     tags:
         aliases:
         - resource_tags
@@ -117,16 +89,6 @@ options:
         - To remove all tags set I(tags={}) and I(purge_tags=true).
         required: false
         type: dict
-    vpc_security_group_ids:
-        description:
-        - VPC security group IDs to associate with the new proxy.
-        elements: str
-        type: list
-    vpc_subnet_ids:
-        description:
-        - VPC subnet IDs to associate with the new proxy.
-        elements: str
-        type: list
     wait:
         default: false
         description:
@@ -186,30 +148,27 @@ def main():
         ),
     )
 
-    argument_spec["auth"] = {
+    argument_spec["cluster_name"] = {"type": "str", "required": True}
+    argument_spec["fargate_profile_name"] = {"type": "str", "required": True}
+    argument_spec["pod_execution_role_arn"] = {"type": "str"}
+    argument_spec["subnets"] = {"type": "list", "elements": "str"}
+    argument_spec["selectors"] = {
         "type": "list",
         "elements": "dict",
         "options": {
-            "auth_scheme": {"type": "str", "choices": ["SECRETS"]},
-            "description": {"type": "str"},
-            "iam_auth": {"type": "str", "choices": ["DISABLED", "REQUIRED"]},
-            "secret_arn": {"type": "str"},
-            "user_name": {"type": "str"},
+            "namespace": {"type": "str"},
+            "labels": {
+                "type": "list",
+                "elements": "dict",
+                "options": {"key": {"type": "str"}, "value": {"type": "str"}},
+            },
         },
     }
-    argument_spec["db_proxy_name"] = {"type": "str", "required": True}
-    argument_spec["debug_logging"] = {"type": "bool"}
-    argument_spec["engine_family"] = {"type": "str", "choices": ["MYSQL", "POSTGRESQL"]}
-    argument_spec["idle_client_timeout"] = {"type": "int"}
-    argument_spec["require_tls"] = {"type": "bool"}
-    argument_spec["role_arn"] = {"type": "str"}
     argument_spec["tags"] = {
         "type": "dict",
         "required": False,
         "aliases": ["resource_tags"],
     }
-    argument_spec["vpc_security_group_ids"] = {"type": "list", "elements": "str"}
-    argument_spec["vpc_subnet_ids"] = {"type": "list", "elements": "str"}
     argument_spec["state"] = {
         "type": "str",
         "choices": ["present", "absent", "list", "describe", "get"],
@@ -219,34 +178,23 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        [
-            "state",
-            "present",
-            ["auth", "engine_family", "role_arn", "vpc_subnet_ids"],
-            True,
-        ]
-    ]
+    required_if = [["state", "present", ["pod_execution_role_arn", "selectors"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True
     )
     cloud = CloudControlResource(module)
 
-    type_name = "AWS::RDS::DBProxy"
+    type_name = "AWS::EKS::FargateProfile"
 
     params = {}
 
-    params["auth"] = module.params.get("auth")
-    params["db_proxy_name"] = module.params.get("db_proxy_name")
-    params["debug_logging"] = module.params.get("debug_logging")
-    params["engine_family"] = module.params.get("engine_family")
-    params["idle_client_timeout"] = module.params.get("idle_client_timeout")
-    params["require_tls"] = module.params.get("require_tls")
-    params["role_arn"] = module.params.get("role_arn")
+    params["cluster_name"] = module.params.get("cluster_name")
+    params["fargate_profile_name"] = module.params.get("fargate_profile_name")
+    params["pod_execution_role_arn"] = module.params.get("pod_execution_role_arn")
+    params["selectors"] = module.params.get("selectors")
+    params["subnets"] = module.params.get("subnets")
     params["tags"] = module.params.get("tags")
-    params["vpc_security_group_ids"] = module.params.get("vpc_security_group_ids")
-    params["vpc_subnet_ids"] = module.params.get("vpc_subnet_ids")
 
     # The DesiredState we pass to AWS must be a JSONArray of non-null values
     _params_to_set = {k: v for k, v in params.items() if v is not None}
@@ -258,10 +206,16 @@ def main():
     params_to_set = snake_dict_to_camel_dict(_params_to_set, capitalize_first=True)
 
     # Ignore createOnlyProperties that can be set only during resource creation
-    create_only_params = ["db_proxy_name", "engine_family", "vpc_subnet_ids"]
+    create_only_params = [
+        "cluster_name",
+        "fargate_profile_name",
+        "pod_execution_role_arn",
+        "subnets",
+        "selectors",
+    ]
 
     state = module.params.get("state")
-    identifier = module.params.get("db_proxy_name")
+    identifier = module.params.get("cluster_name")
 
     results = {"changed": False, "result": []}
 

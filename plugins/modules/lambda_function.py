@@ -28,7 +28,6 @@ options:
     code:
         description:
         - The code for the function.
-        required: true
         suboptions:
             image_uri:
                 description:
@@ -93,7 +92,6 @@ options:
             size:
                 description:
                 - The amount of ephemeral storage that your function has access to.
-                required: true
                 type: int
         type: dict
     file_system_configs:
@@ -110,13 +108,13 @@ options:
                 description:
                 - The path where the function can access the file system, starting
                     with /mnt/.
-                required: true
                 type: str
         type: list
     function_name:
         description:
         - The name of the Lambda function, up to 64 characters in length.
         - If you dont specify a name, AWS CloudFormation generates one.
+        required: true
         type: str
     handler:
         description:
@@ -182,7 +180,6 @@ options:
     role:
         description:
         - The Amazon Resource Name (ARN) of the functions execution role.
-        required: true
         type: str
     runtime:
         description:
@@ -322,7 +319,6 @@ def main():
             "zip_file": {"type": "str"},
             "image_uri": {"type": "str"},
         },
-        "required": True,
     }
     argument_spec["dead_letter_config"] = {
         "type": "dict",
@@ -335,14 +331,14 @@ def main():
     }
     argument_spec["ephemeral_storage"] = {
         "type": "dict",
-        "options": {"size": {"type": "int", "required": True}},
+        "options": {"size": {"type": "int"}},
     }
     argument_spec["file_system_configs"] = {
         "type": "list",
         "elements": "dict",
-        "options": {"local_mount_path": {"type": "str", "required": True}},
+        "options": {"local_mount_path": {"type": "str"}},
     }
-    argument_spec["function_name"] = {"type": "str"}
+    argument_spec["function_name"] = {"type": "str", "required": True}
     argument_spec["handler"] = {"type": "str"}
     argument_spec["architectures"] = {
         "type": "list",
@@ -353,7 +349,7 @@ def main():
     argument_spec["layers"] = {"type": "list", "elements": "str"}
     argument_spec["memory_size"] = {"type": "int"}
     argument_spec["reserved_concurrent_executions"] = {"type": "int"}
-    argument_spec["role"] = {"type": "str", "required": True}
+    argument_spec["role"] = {"type": "str"}
     argument_spec["runtime"] = {"type": "str"}
     argument_spec["tags"] = {
         "type": "dict",
@@ -391,11 +387,7 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["function_name", "role", "code"], True],
-        ["state", "absent", ["function_name"], True],
-        ["state", "get", ["function_name"], True],
-    ]
+    required_if = [["state", "present", ["code", "role"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

@@ -23,18 +23,17 @@ options:
             function code will be expected to be signed by profiles from this listWhen
             the I(code_signing_config) is later on attached to a function, the function
             code will be expected to be signed by profiles from this list
-        required: true
         suboptions:
             signing_profile_version_arns:
                 description:
                 - List of Signing profile version Arns
                 elements: str
-                required: true
                 type: list
         type: dict
     code_signing_config_arn:
         description:
         - A unique Arn for I(code_signing_config) resource
+        required: true
         type: str
     code_signing_policies:
         description:
@@ -135,13 +134,8 @@ def main():
     argument_spec["allowed_publishers"] = {
         "type": "dict",
         "options": {
-            "signing_profile_version_arns": {
-                "type": "list",
-                "required": True,
-                "elements": "str",
-            }
+            "signing_profile_version_arns": {"type": "list", "elements": "str"}
         },
-        "required": True,
     }
     argument_spec["code_signing_policies"] = {
         "type": "dict",
@@ -153,7 +147,7 @@ def main():
             }
         },
     }
-    argument_spec["code_signing_config_arn"] = {"type": "str"}
+    argument_spec["code_signing_config_arn"] = {"type": "str", "required": True}
     argument_spec["state"] = {
         "type": "str",
         "choices": ["present", "absent", "list", "describe", "get"],
@@ -162,11 +156,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["allowed_publishers"], True],
-        ["state", "absent", [], True],
-        ["state", "get", [], True],
-    ]
+    required_if = [["state", "present", ["allowed_publishers"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

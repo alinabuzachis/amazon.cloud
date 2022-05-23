@@ -27,7 +27,6 @@ options:
         - A structure that contains information about where and how to deliver your
             reports, specifically your Amazon S3 bucket name, S3 key prefix, and the
             formats of your reports.
-        required: true
         suboptions:
             formats:
                 description:
@@ -38,7 +37,6 @@ options:
             s3_bucket_name:
                 description:
                 - The unique name of the S3 bucket that receives your reports.
-                required: true
                 type: str
             s3_key_prefix:
                 description:
@@ -51,6 +49,7 @@ options:
         description:
         - An Amazon Resource Name (ARN) that uniquely identifies a resource.
         - The format of the ARN depends on the resource type.
+        required: true
         type: str
     report_plan_description:
         description:
@@ -88,7 +87,6 @@ options:
         description:
         - Identifies the report template for the report.
         - Reports are built using a report template.
-        required: true
         suboptions:
             framework_arns:
                 description:
@@ -101,7 +99,6 @@ options:
                 - Reports are built using a report template.
                 - 'The report templates are: `C(BACKUP_JOB_REPORT) | C(COPY_JOB_REPORT)
                     | C(RESTORE_JOB_REPORT)`'
-                required: true
                 type: str
         type: dict
     state:
@@ -188,7 +185,7 @@ def main():
     )
 
     argument_spec["report_plan_name"] = {"type": "str"}
-    argument_spec["report_plan_arn"] = {"type": "str"}
+    argument_spec["report_plan_arn"] = {"type": "str", "required": True}
     argument_spec["report_plan_description"] = {"type": "str"}
     argument_spec["report_plan_tags"] = {
         "type": "list",
@@ -199,18 +196,16 @@ def main():
         "type": "dict",
         "options": {
             "formats": {"type": "list", "elements": "str"},
-            "s3_bucket_name": {"type": "str", "required": True},
+            "s3_bucket_name": {"type": "str"},
             "s3_key_prefix": {"type": "str"},
         },
-        "required": True,
     }
     argument_spec["report_setting"] = {
         "type": "dict",
         "options": {
-            "report_template": {"type": "str", "required": True},
+            "report_template": {"type": "str"},
             "framework_arns": {"type": "list", "elements": "str"},
         },
-        "required": True,
     }
     argument_spec["state"] = {
         "type": "str",
@@ -227,9 +222,7 @@ def main():
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
     required_if = [
-        ["state", "present", ["report_delivery_channel", "report_setting"], True],
-        ["state", "absent", [], True],
-        ["state", "get", [], True],
+        ["state", "present", ["report_delivery_channel", "report_setting"], True]
     ]
 
     module = AnsibleAWSModule(

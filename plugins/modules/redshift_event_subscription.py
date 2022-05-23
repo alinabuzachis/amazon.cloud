@@ -190,11 +190,7 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["subscription_name"], True],
-        ["state", "absent", ["subscription_name"], True],
-        ["state", "get", ["subscription_name"], True],
-    ]
+    required_if = [["state", "present", [], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

@@ -20,13 +20,13 @@ options:
     framework_arn:
         description:
         - An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource
+        required: true
         type: str
     framework_controls:
         description:
         - Contains detailed information about all of the controls of a framework.
         - Each framework must contain at least one control.
         elements: dict
-        required: true
         suboptions:
             control_input_parameters:
                 description:
@@ -36,19 +36,16 @@ options:
                     parameter_name:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                     parameter_value:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                 type: list
             control_name:
                 description:
                 - The name of a control.
                 - This name is between 1 and 256 characters.
-                required: true
                 type: str
             control_scope:
                 description:
@@ -83,7 +80,6 @@ options:
                                 - 'You can use any of the following characters: the
                                     set of Unicode letters, digits, whitespace, _,
                                     ., /, =, +, and -.'
-                                required: true
                                 type: str
                             value:
                                 description:
@@ -94,7 +90,6 @@ options:
                                 - 'You can use any of the following characters: the
                                     set of Unicode letters, digits, whitespace, _,
                                     ., /, =, +, and -.'
-                                required: true
                                 type: str
                         type: list
                 type: dict
@@ -121,7 +116,6 @@ options:
                     and cannot be prefixed with aws:.
                 - 'You can use any of the following characters: the set of Unicode
                     letters, digits, whitespace, _, ., /, =, +, and -.'
-                required: true
                 type: str
             value:
                 description:
@@ -130,7 +124,6 @@ options:
                     and cannot be prefixed with aws:.
                 - 'You can use any of the following characters: the set of Unicode
                     letters, digits, whitespace, _, ., /, =, +, and -.'
-                required: true
                 type: str
         type: list
     purge_tags:
@@ -224,18 +217,18 @@ def main():
 
     argument_spec["framework_name"] = {"type": "str"}
     argument_spec["framework_description"] = {"type": "str"}
-    argument_spec["framework_arn"] = {"type": "str"}
+    argument_spec["framework_arn"] = {"type": "str", "required": True}
     argument_spec["framework_controls"] = {
         "type": "list",
         "elements": "dict",
         "options": {
-            "control_name": {"type": "str", "required": True},
+            "control_name": {"type": "str"},
             "control_input_parameters": {
                 "type": "list",
                 "elements": "dict",
                 "options": {
-                    "parameter_name": {"type": "str", "required": True},
-                    "parameter_value": {"type": "str", "required": True},
+                    "parameter_name": {"type": "str"},
+                    "parameter_value": {"type": "str"},
                 },
             },
             "control_scope": {
@@ -246,23 +239,16 @@ def main():
                     "tags": {
                         "type": "list",
                         "elements": "dict",
-                        "options": {
-                            "key": {"type": "str", "required": True},
-                            "value": {"type": "str", "required": True},
-                        },
+                        "options": {"key": {"type": "str"}, "value": {"type": "str"}},
                     },
                 },
             },
         },
-        "required": True,
     }
     argument_spec["framework_tags"] = {
         "type": "list",
         "elements": "dict",
-        "options": {
-            "key": {"type": "str", "required": True},
-            "value": {"type": "str", "required": True},
-        },
+        "options": {"key": {"type": "str"}, "value": {"type": "str"}},
     }
     argument_spec["state"] = {
         "type": "str",
@@ -278,11 +264,7 @@ def main():
     }
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["framework_controls"], True],
-        ["state", "absent", [], True],
-        ["state", "get", [], True],
-    ]
+    required_if = [["state", "present", ["framework_controls"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

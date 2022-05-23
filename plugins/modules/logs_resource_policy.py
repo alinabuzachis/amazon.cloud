@@ -20,7 +20,6 @@ options:
     policy_document:
         description:
         - The policy document
-        required: true
         type: str
     policy_name:
         description:
@@ -103,7 +102,7 @@ def main():
     )
 
     argument_spec["policy_name"] = {"type": "str", "required": True}
-    argument_spec["policy_document"] = {"type": "str", "required": True}
+    argument_spec["policy_document"] = {"type": "str"}
     argument_spec["state"] = {
         "type": "str",
         "choices": ["present", "absent", "list", "describe", "get"],
@@ -112,11 +111,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["policy_document", "policy_name"], True],
-        ["state", "absent", ["policy_name"], True],
-        ["state", "get", ["policy_name"], True],
-    ]
+    required_if = [["state", "present", ["policy_document"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

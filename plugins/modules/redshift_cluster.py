@@ -69,6 +69,7 @@ options:
         - All alphabetical characters must be lower case, no hypens at the end, no
             two consecutive hyphens.
         - Cluster name should be unique for all clusters within an AWS account
+        required: true
         type: str
     cluster_parameter_group_name:
         description:
@@ -89,7 +90,6 @@ options:
         - When cluster type is specified as single-node, the I(number_of_nodes) parameter
             is not required and if multi-node, the I(number_of_nodes) parameter is
             required
-        required: true
         type: str
     cluster_version:
         description:
@@ -101,7 +101,6 @@ options:
         - The name of the first database to be created when the cluster is created.
         - To create additional databases after the cluster is created, connect to
             the cluster with a SQL client and use SQL commands to create a database.
-        required: true
         type: str
     defer_maintenance:
         description:
@@ -182,7 +181,6 @@ options:
             bucket_name:
                 description:
                 - Not Provived.
-                required: true
                 type: str
             s3_key_prefix:
                 description:
@@ -213,21 +211,18 @@ options:
         - Password must be between 8 and 64 characters in length, should have at least
             one uppercase letter.Must contain at least one lowercase letter.Must contain
             one number.Can be any printable ASCII character.
-        required: true
         type: str
     master_username:
         description:
         - The user name associated with the master user account for the cluster that
             is being created.
         - The user name cant be PUBLIC and first character must be a letter.
-        required: true
         type: str
     node_type:
         description:
         - 'The node type to be provisioned for the cluster.Valid Values: ds2.xlarge
             | ds2.8xlarge | dc1.large | dc1.8xlarge | dc2.large | dc2.8xlarge | ra3.4xlarge
             | ra3.16xlarge'
-        required: true
         type: str
     number_of_nodes:
         description:
@@ -387,18 +382,18 @@ def main():
         ),
     )
 
-    argument_spec["cluster_identifier"] = {"type": "str"}
-    argument_spec["master_username"] = {"type": "str", "required": True}
-    argument_spec["master_user_password"] = {"type": "str", "required": True}
-    argument_spec["node_type"] = {"type": "str", "required": True}
+    argument_spec["cluster_identifier"] = {"type": "str", "required": True}
+    argument_spec["master_username"] = {"type": "str"}
+    argument_spec["master_user_password"] = {"type": "str"}
+    argument_spec["node_type"] = {"type": "str"}
     argument_spec["allow_version_upgrade"] = {"type": "bool"}
     argument_spec["automated_snapshot_retention_period"] = {"type": "int"}
     argument_spec["availability_zone"] = {"type": "str"}
     argument_spec["cluster_parameter_group_name"] = {"type": "str"}
-    argument_spec["cluster_type"] = {"type": "str", "required": True}
+    argument_spec["cluster_type"] = {"type": "str"}
     argument_spec["cluster_version"] = {"type": "str"}
     argument_spec["cluster_subnet_group_name"] = {"type": "str"}
-    argument_spec["db_name"] = {"type": "str", "required": True}
+    argument_spec["db_name"] = {"type": "str"}
     argument_spec["elastic_ip"] = {"type": "str"}
     argument_spec["encrypted"] = {"type": "bool"}
     argument_spec["hsm_client_certificate_identifier"] = {"type": "str"}
@@ -420,10 +415,7 @@ def main():
     argument_spec["owner_account"] = {"type": "str"}
     argument_spec["logging_properties"] = {
         "type": "dict",
-        "options": {
-            "bucket_name": {"type": "str", "required": True},
-            "s3_key_prefix": {"type": "str"},
-        },
+        "options": {"bucket_name": {"type": "str"}, "s3_key_prefix": {"type": "str"}},
     }
     argument_spec["endpoint"] = {"type": "dict", "options": {}}
     argument_spec["destination_region"] = {"type": "str"}
@@ -459,16 +451,13 @@ def main():
             "present",
             [
                 "master_user_password",
-                "db_name",
-                "master_username",
                 "node_type",
-                "cluster_identifier",
+                "master_username",
+                "db_name",
                 "cluster_type",
             ],
             True,
-        ],
-        ["state", "absent", ["cluster_identifier"], True],
-        ["state", "get", ["cluster_identifier"], True],
+        ]
     ]
 
     module = AnsibleAWSModule(

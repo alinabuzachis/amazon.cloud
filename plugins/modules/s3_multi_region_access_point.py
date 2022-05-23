@@ -20,6 +20,7 @@ options:
     name:
         description:
         - The name you want to assign to this Multi Region Access Point.
+        required: true
         type: str
     public_access_block_configuration:
         description:
@@ -77,12 +78,10 @@ options:
         - The name of the bucket that represents of the region belonging to this Multi
             Region Access Point.
         elements: dict
-        required: true
         suboptions:
             bucket:
                 description:
                 - Not Provived.
-                required: true
                 type: str
         type: list
     state:
@@ -160,7 +159,7 @@ def main():
         ),
     )
 
-    argument_spec["name"] = {"type": "str"}
+    argument_spec["name"] = {"type": "str", "required": True}
     argument_spec["public_access_block_configuration"] = {
         "type": "dict",
         "options": {
@@ -173,8 +172,7 @@ def main():
     argument_spec["regions"] = {
         "type": "list",
         "elements": "dict",
-        "options": {"bucket": {"type": "str", "required": True}},
-        "required": True,
+        "options": {"bucket": {"type": "str"}},
     }
     argument_spec["state"] = {
         "type": "str",
@@ -184,11 +182,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["name", "regions"], True],
-        ["state", "absent", ["name"], True],
-        ["state", "get", ["name"], True],
-    ]
+    required_if = [["state", "present", ["regions"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

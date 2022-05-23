@@ -21,6 +21,7 @@ options:
     name:
         description:
         - The name you want to assign to this Object lambda Access Point.
+        required: true
         type: str
     object_lambda_configuration:
         description:
@@ -31,7 +32,6 @@ options:
         - Customers can also set if they like to enable Cloudwatch metrics for accesses
             to this Object lambda Access Point.
         - Default setting for Cloudwatch metrics is disable.
-        required: true
         suboptions:
             allowed_features:
                 description:
@@ -45,7 +45,6 @@ options:
             supporting_access_point:
                 description:
                 - Not Provived.
-                required: true
                 type: str
             transformation_configurations:
                 description:
@@ -57,12 +56,10 @@ options:
                         description:
                         - Not Provived.
                         elements: str
-                        required: true
                         type: list
                     content_transformation:
                         description:
                         - Not Provived.
-                        required: true
                         suboptions:
                             aws_lambda:
                                 description:
@@ -71,7 +68,6 @@ options:
                                     function_arn:
                                         description:
                                         - Not Provived.
-                                        required: true
                                         type: str
                                     function_payload:
                                         description:
@@ -156,35 +152,33 @@ def main():
         ),
     )
 
-    argument_spec["name"] = {"type": "str"}
+    argument_spec["name"] = {"type": "str", "required": True}
     argument_spec["object_lambda_configuration"] = {
         "type": "dict",
         "options": {
-            "supporting_access_point": {"type": "str", "required": True},
+            "supporting_access_point": {"type": "str"},
             "allowed_features": {"type": "list", "elements": "str"},
             "cloud_watch_metrics_enabled": {"type": "bool"},
             "transformation_configurations": {
                 "type": "list",
                 "elements": "dict",
                 "options": {
-                    "actions": {"type": "list", "required": True, "elements": "str"},
+                    "actions": {"type": "list", "elements": "str"},
                     "content_transformation": {
                         "type": "dict",
                         "options": {
                             "aws_lambda": {
                                 "type": "dict",
                                 "options": {
-                                    "function_arn": {"type": "str", "required": True},
+                                    "function_arn": {"type": "str"},
                                     "function_payload": {"type": "str"},
                                 },
                             }
                         },
-                        "required": True,
                     },
                 },
             },
         },
-        "required": True,
     }
     argument_spec["state"] = {
         "type": "str",
@@ -194,11 +188,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["name", "object_lambda_configuration"], True],
-        ["state", "absent", ["name"], True],
-        ["state", "get", ["name"], True],
-    ]
+    required_if = [["state", "present", ["object_lambda_configuration"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

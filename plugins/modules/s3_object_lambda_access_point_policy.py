@@ -14,7 +14,8 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 module: s3_object_lambda_access_point_policy
 short_description: Specifies the Object Lambda Access Point resource policy document
-description: Create and manage Object Lambda Access Point resource policy document.
+description: Create and manage Object Lambda Access Point resource policy document
+    (create, update, describe, delete).
 options:
     object_lambda_access_point:
         description:
@@ -27,7 +28,6 @@ options:
         - A policy document containing permissions to add to the specified I(object_lambda_access_point).
         - For more information, see Access Policy Language Overview (U(https://docs.aws.amazon.com/AmazonS3/latest/dev/access-policy-language-overview.html))
             in the Amazon Simple Storage Service Developer Guide.
-        required: true
         type: dict
     state:
         choices:
@@ -105,7 +105,7 @@ def main():
     )
 
     argument_spec["object_lambda_access_point"] = {"type": "str", "required": True}
-    argument_spec["policy_document"] = {"type": "dict", "required": True}
+    argument_spec["policy_document"] = {"type": "dict"}
     argument_spec["state"] = {
         "type": "str",
         "choices": ["present", "absent", "list", "describe", "get"],
@@ -114,11 +114,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["policy_document", "object_lambda_access_point"], True],
-        ["state", "absent", ["object_lambda_access_point"], True],
-        ["state", "get", ["object_lambda_access_point"], True],
-    ]
+    required_if = [["state", "present", ["policy_document"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

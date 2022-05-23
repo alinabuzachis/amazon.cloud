@@ -26,3 +26,4 @@ plugins/modules/s3_multi_region_access_point.py validate-modules:parameter-state
 plugins/modules/s3_multi_region_access_point_policy.py validate-modules:parameter-state-invalid-choice
 plugins/modules/s3_object_lambda_access_point.py validate-modules:parameter-state-invalid-choice
 plugins/modules/s3_object_lambda_access_point_policy.py validate-modules:parameter-state-invalid-choice
+plugins/modules/eks_fargate_profile.py validate-modules:parameter-state-invalid-choice

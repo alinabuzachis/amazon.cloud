@@ -14,8 +14,8 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 module: backup_backup_vault
 short_description: Create and manage logical containers where backups are stored
-description: Creates and manages logical containers where backups are stored (list,
-    create, update, describe, delete).
+description: Creates and manages logical containers where backups are stored (create,
+    update, describe, delete).
 options:
     access_policy:
         description:
@@ -49,7 +49,6 @@ options:
             min_retention_days:
                 description:
                 - Not Provived.
-                required: true
                 type: int
         type: dict
     notifications:
@@ -60,12 +59,10 @@ options:
                 description:
                 - Not Provived.
                 elements: str
-                required: true
                 type: list
             sns_topic_arn:
                 description:
                 - Not Provived.
-                required: true
                 type: str
         type: dict
     purge_tags:
@@ -164,18 +161,14 @@ def main():
     argument_spec["notifications"] = {
         "type": "dict",
         "options": {
-            "backup_vault_events": {
-                "type": "list",
-                "required": True,
-                "elements": "str",
-            },
-            "sns_topic_arn": {"type": "str", "required": True},
+            "backup_vault_events": {"type": "list", "elements": "str"},
+            "sns_topic_arn": {"type": "str"},
         },
     }
     argument_spec["lock_configuration"] = {
         "type": "dict",
         "options": {
-            "min_retention_days": {"type": "int", "required": True},
+            "min_retention_days": {"type": "int"},
             "max_retention_days": {"type": "int"},
             "changeable_for_days": {"type": "int"},
         },
@@ -194,11 +187,7 @@ def main():
     }
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["backup_vault_name"], True],
-        ["state", "absent", ["backup_vault_name"], True],
-        ["state", "get", ["backup_vault_name"], True],
-    ]
+    required_if = [["state", "present", [], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

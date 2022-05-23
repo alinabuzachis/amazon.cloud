@@ -26,7 +26,6 @@ options:
                 - Suspended
                 description:
                 - Configures the transfer acceleration state for an Amazon S3 bucket.
-                required: true
                 type: str
         type: dict
     access_control:
@@ -52,7 +51,6 @@ options:
             id:
                 description:
                 - The ID that identifies the analytics configuration.
-                required: true
                 type: str
             prefix:
                 description:
@@ -64,7 +62,6 @@ options:
                 - Specifies data related to access patterns to be collected and made
                     available to analyze the tradeoffs between different storage classes
                     for an Amazon S3 bucket.
-                required: true
                 suboptions:
                     data_export:
                         description:
@@ -76,7 +73,6 @@ options:
                                 - Specifies information about where to publish analysis
                                     or configuration results for an Amazon S3 bucket
                                     and S3 Replication Time Control (S3 RTC).
-                                required: true
                                 suboptions:
                                     bucket_account_id:
                                         description:
@@ -119,12 +115,10 @@ options:
                     key:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                     value:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                 type: list
         type: list
@@ -137,7 +131,6 @@ options:
                 description:
                 - Specifies the default server-side encryption configuration.
                 elements: dict
-                required: true
                 suboptions:
                     bucket_key_enabled:
                         description:
@@ -167,7 +160,6 @@ options:
                                 - aws:kms
                                 description:
                                 - Not Provived.
-                                required: true
                                 type: str
                         type: dict
                 type: list
@@ -177,6 +169,7 @@ options:
         - A name for the bucket.
         - If you dont specify a name, AWS CloudFormation generates a unique physical
             ID and uses that ID for the bucket name.
+        required: true
         type: str
     cors_configuration:
         description:
@@ -205,14 +198,12 @@ options:
                         description:
                         - An HTTP method that you allow the origin to execute.
                         elements: str
-                        required: true
                         type: list
                     allowed_origins:
                         description:
                         - One or more origins you want customers to be able to access
                             the bucket from.
                         elements: str
-                        required: true
                         type: list
                     exposed_headers:
                         description:
@@ -240,7 +231,6 @@ options:
             id:
                 description:
                 - The ID used to identify the S3 Intelligent-Tiering configuration.
-                required: true
                 type: str
             prefix:
                 description:
@@ -253,7 +243,6 @@ options:
                 - Enabled
                 description:
                 - Specifies the status of the configuration.
-                required: true
                 type: str
             tag_filters:
                 description:
@@ -263,12 +252,10 @@ options:
                     key:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                     value:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                 type: list
             tierings:
@@ -289,7 +276,6 @@ options:
                         - See Storage class for automatically optimizing frequently
                             and infrequently accessed objects for a list of access
                             tiers in the S3 Intelligent-Tiering storage class.
-                        required: true
                         type: str
                     days:
                         description:
@@ -300,7 +286,6 @@ options:
                             tier must be at least 90 days and Deep Archive Access
                             tier must be at least 180 days.
                         - The maximum can be up to 2 years (730 days).
-                        required: true
                         type: int
                 type: list
         type: list
@@ -314,7 +299,6 @@ options:
                 - Specifies information about where to publish analysis or configuration
                     results for an Amazon S3 bucket and S3 Replication Time Control
                     (S3 RTC).
-                required: true
                 suboptions:
                     bucket_account_id:
                         description:
@@ -343,12 +327,10 @@ options:
             enabled:
                 description:
                 - Specifies whether the inventory is enabled or disabled.
-                required: true
                 type: bool
             id:
                 description:
                 - The ID used to identify the inventory configuration.
-                required: true
                 type: str
             included_object_versions:
                 choices:
@@ -356,7 +338,6 @@ options:
                 - Current
                 description:
                 - Object versions to include in the inventory list.
-                required: true
                 type: str
             optional_fields:
                 choices:
@@ -387,7 +368,6 @@ options:
                 - Weekly
                 description:
                 - Specifies the schedule for generating inventory results.
-                required: true
                 type: str
         type: list
     lifecycle_configuration:
@@ -412,7 +392,6 @@ options:
                                 description:
                                 - Specifies the number of days after which Amazon
                                     S3 aborts an incomplete multipart upload.
-                                required: true
                                 type: int
                         type: dict
                     expiration_date:
@@ -451,7 +430,6 @@ options:
                                 description:
                                 - Specified the number of days an object is noncurrent
                                     before Amazon S3 can perform the associated action
-                                required: true
                                 type: int
                         type: dict
                     noncurrent_version_expiration_in_days:
@@ -488,13 +466,11 @@ options:
                                 - STANDARD_IA
                                 description:
                                 - The class of storage used to store the object.
-                                required: true
                                 type: str
                             transition_in_days:
                                 description:
                                 - Specifies the number of days an object is noncurrent
                                     before Amazon S3 can perform the associated action.
-                                required: true
                                 type: int
                         type: dict
                     noncurrent_version_transitions:
@@ -528,13 +504,11 @@ options:
                                 - STANDARD_IA
                                 description:
                                 - The class of storage used to store the object.
-                                required: true
                                 type: str
                             transition_in_days:
                                 description:
                                 - Specifies the number of days an object is noncurrent
                                     before Amazon S3 can perform the associated action.
-                                required: true
                                 type: int
                         type: list
                     object_size_greater_than:
@@ -555,7 +529,6 @@ options:
                         - Enabled
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                     tag_filters:
                         description:
@@ -566,12 +539,10 @@ options:
                             key:
                                 description:
                                 - Not Provived.
-                                required: true
                                 type: str
                             value:
                                 description:
                                 - Not Provived.
-                                required: true
                                 type: str
                         type: list
                     transition:
@@ -590,7 +561,6 @@ options:
                                 - STANDARD_IA
                                 description:
                                 - Not Provived.
-                                required: true
                                 type: str
                             transition_date:
                                 description:
@@ -619,7 +589,6 @@ options:
                                 - STANDARD_IA
                                 description:
                                 - Not Provived.
-                                required: true
                                 type: str
                             transition_date:
                                 description:
@@ -663,7 +632,6 @@ options:
             id:
                 description:
                 - Not Provived.
-                required: true
                 type: str
             prefix:
                 description:
@@ -677,12 +645,10 @@ options:
                     key:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                     value:
                         description:
                         - Not Provived.
-                        required: true
                         type: str
                 type: list
         type: list
@@ -713,7 +679,6 @@ options:
                         description:
                         - The Amazon S3 bucket event for which to invoke the AWS Lambda
                             function.
-                        required: true
                         type: str
                     filter:
                         description:
@@ -725,7 +690,6 @@ options:
                                 description:
                                 - A container for object key name prefix and suffix
                                     filtering rules.
-                                required: true
                                 suboptions:
                                     rules:
                                         description:
@@ -737,12 +701,10 @@ options:
                                             name:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                             value:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                         type: list
                                 type: dict
@@ -751,7 +713,6 @@ options:
                         description:
                         - The Amazon Resource Name (ARN) of the AWS Lambda function
                             that Amazon S3 invokes when the specified event type occurs.
-                        required: true
                         type: str
                 type: list
             queue_configurations:
@@ -764,7 +725,6 @@ options:
                         description:
                         - The Amazon S3 bucket event about which you want to publish
                             messages to Amazon SQS.
-                        required: true
                         type: str
                     filter:
                         description:
@@ -775,7 +735,6 @@ options:
                                 description:
                                 - A container for object key name prefix and suffix
                                     filtering rules.
-                                required: true
                                 suboptions:
                                     rules:
                                         description:
@@ -787,12 +746,10 @@ options:
                                             name:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                             value:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                         type: list
                                 type: dict
@@ -802,7 +759,6 @@ options:
                         - The Amazon Resource Name (ARN) of the Amazon SQS queue to
                             which Amazon S3 publishes a message when it detects events
                             of the specified type.
-                        required: true
                         type: str
                 type: list
             topic_configurations:
@@ -814,7 +770,6 @@ options:
                     event:
                         description:
                         - The Amazon S3 bucket event about which to send notifications.
-                        required: true
                         type: str
                     filter:
                         description:
@@ -825,7 +780,6 @@ options:
                                 description:
                                 - A container for object key name prefix and suffix
                                     filtering rules.
-                                required: true
                                 suboptions:
                                     rules:
                                         description:
@@ -837,12 +791,10 @@ options:
                                             name:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                             value:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                         type: list
                                 type: dict
@@ -852,7 +804,6 @@ options:
                         - The Amazon Resource Name (ARN) of the Amazon SNS topic to
                             which Amazon S3 publishes a message when it detects events
                             of the specified type.
-                        required: true
                         type: str
                 type: list
         type: dict
@@ -904,7 +855,6 @@ options:
                 description:
                 - Not Provived.
                 elements: dict
-                required: true
                 suboptions:
                     object_ownership:
                         choices:
@@ -978,7 +928,6 @@ options:
                 description:
                 - The Amazon Resource Name (ARN) of the AWS Identity and Access Management
                     (IAM) role that Amazon S3 assumes when replicating objects.
-                required: true
                 type: str
             rules:
                 description:
@@ -1002,7 +951,6 @@ options:
                         description:
                         - Specifies which Amazon S3 bucket to store replicated objects
                             in and their storage class.
-                        required: true
                         suboptions:
                             access_control_translation:
                                 description:
@@ -1040,7 +988,6 @@ options:
                                             of the customer managed customer master
                                             key (CMK) stored in AWS Key Management
                                             Service (KMS) for the destination bucket.
-                                        required: true
                                         type: str
                                 type: dict
                             metrics:
@@ -1054,7 +1001,6 @@ options:
                                             minutes:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: int
                                         type: dict
                                     status:
@@ -1063,7 +1009,6 @@ options:
                                         - Enabled
                                         description:
                                         - Not Provived.
-                                        required: true
                                         type: str
                                 type: dict
                             replication_time:
@@ -1076,17 +1021,14 @@ options:
                                         - Enabled
                                         description:
                                         - Not Provived.
-                                        required: true
                                         type: str
                                     time:
                                         description:
                                         - Not Provived.
-                                        required: true
                                         suboptions:
                                             minutes:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: int
                                         type: dict
                                 type: dict
@@ -1126,12 +1068,10 @@ options:
                                             key:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                             value:
                                                 description:
                                                 - Not Provived.
-                                                required: true
                                                 type: str
                                         type: list
                                 type: dict
@@ -1147,12 +1087,10 @@ options:
                                     key:
                                         description:
                                         - Not Provived.
-                                        required: true
                                         type: str
                                     value:
                                         description:
                                         - Not Provived.
-                                        required: true
                                         type: str
                                 type: dict
                         type: dict
@@ -1186,7 +1124,6 @@ options:
                                         description:
                                         - Specifies whether Amazon S3 replicates modifications
                                             on replicas.
-                                        required: true
                                         type: str
                                 type: dict
                             sse_kms_encrypted_objects:
@@ -1205,7 +1142,6 @@ options:
                                             created with server-side encryption using
                                             a customer master key (CMK) stored in
                                             AWS Key Management Service.
-                                        required: true
                                         type: str
                                 type: dict
                         type: dict
@@ -1215,7 +1151,6 @@ options:
                         - Enabled
                         description:
                         - Specifies whether the rule is enabled.
-                        required: true
                         type: str
                 type: list
         type: dict
@@ -1286,7 +1221,6 @@ options:
                     host_name:
                         description:
                         - Name of the host where requests are redirected.
-                        required: true
                         type: str
                     protocol:
                         choices:
@@ -1312,7 +1246,6 @@ options:
                             code to return.Specifies how requests are redirected.
                         - In the event of an error, you can specify a different error
                             code to return.
-                        required: true
                         suboptions:
                             host_name:
                                 description:
@@ -1411,11 +1344,7 @@ def main():
     argument_spec["accelerate_configuration"] = {
         "type": "dict",
         "options": {
-            "acceleration_status": {
-                "type": "str",
-                "choices": ["Enabled", "Suspended"],
-                "required": True,
-            }
+            "acceleration_status": {"type": "str", "choices": ["Enabled", "Suspended"]}
         },
     }
     argument_spec["access_control"] = {
@@ -1438,10 +1367,7 @@ def main():
             "tag_filters": {
                 "type": "list",
                 "elements": "dict",
-                "options": {
-                    "value": {"type": "str", "required": True},
-                    "key": {"type": "str", "required": True},
-                },
+                "options": {"value": {"type": "str"}, "key": {"type": "str"}},
             },
             "storage_class_analysis": {
                 "type": "dict",
@@ -1451,7 +1377,6 @@ def main():
                         "options": {
                             "destination": {
                                 "type": "dict",
-                                "required": True,
                                 "options": {
                                     "bucket_arn": {"type": "str"},
                                     "bucket_account_id": {"type": "str"},
@@ -1466,9 +1391,8 @@ def main():
                         },
                     }
                 },
-                "required": True,
             },
-            "id": {"type": "str", "required": True},
+            "id": {"type": "str"},
             "prefix": {"type": "str"},
         },
     }
@@ -1477,7 +1401,6 @@ def main():
         "options": {
             "server_side_encryption_configuration": {
                 "type": "list",
-                "required": True,
                 "elements": "dict",
                 "options": {
                     "bucket_key_enabled": {"type": "bool"},
@@ -1488,7 +1411,6 @@ def main():
                             "sse_algorithm": {
                                 "type": "str",
                                 "choices": ["AES256", "aws:kms"],
-                                "required": True,
                             },
                         },
                     },
@@ -1496,7 +1418,7 @@ def main():
             }
         },
     }
-    argument_spec["bucket_name"] = {"type": "str"}
+    argument_spec["bucket_name"] = {"type": "str", "required": True}
     argument_spec["cors_configuration"] = {
         "type": "dict",
         "options": {
@@ -1507,15 +1429,10 @@ def main():
                     "allowed_headers": {"type": "list", "elements": "str"},
                     "allowed_methods": {
                         "type": "list",
-                        "required": True,
                         "elements": "str",
                         "choices": ["DELETE", "GET", "HEAD", "POST", "PUT"],
                     },
-                    "allowed_origins": {
-                        "type": "list",
-                        "required": True,
-                        "elements": "str",
-                    },
+                    "allowed_origins": {"type": "list", "elements": "str"},
                     "exposed_headers": {"type": "list", "elements": "str"},
                     "id": {"type": "str"},
                     "max_age": {"type": "int"},
@@ -1527,20 +1444,13 @@ def main():
         "type": "list",
         "elements": "dict",
         "options": {
-            "id": {"type": "str", "required": True},
+            "id": {"type": "str"},
             "prefix": {"type": "str"},
-            "status": {
-                "type": "str",
-                "choices": ["Disabled", "Enabled"],
-                "required": True,
-            },
+            "status": {"type": "str", "choices": ["Disabled", "Enabled"]},
             "tag_filters": {
                 "type": "list",
                 "elements": "dict",
-                "options": {
-                    "value": {"type": "str", "required": True},
-                    "key": {"type": "str", "required": True},
-                },
+                "options": {"value": {"type": "str"}, "key": {"type": "str"}},
             },
             "tierings": {
                 "type": "list",
@@ -1549,9 +1459,8 @@ def main():
                     "access_tier": {
                         "type": "str",
                         "choices": ["ARCHIVE_ACCESS", "DEEP_ARCHIVE_ACCESS"],
-                        "required": True,
                     },
-                    "days": {"type": "int", "required": True},
+                    "days": {"type": "int"},
                 },
             },
         },
@@ -1562,7 +1471,6 @@ def main():
         "options": {
             "destination": {
                 "type": "dict",
-                "required": True,
                 "options": {
                     "bucket_arn": {"type": "str"},
                     "bucket_account_id": {"type": "str"},
@@ -1570,13 +1478,9 @@ def main():
                     "prefix": {"type": "str"},
                 },
             },
-            "enabled": {"type": "bool", "required": True},
-            "id": {"type": "str", "required": True},
-            "included_object_versions": {
-                "type": "str",
-                "choices": ["All", "Current"],
-                "required": True,
-            },
+            "enabled": {"type": "bool"},
+            "id": {"type": "str"},
+            "included_object_versions": {"type": "str", "choices": ["All", "Current"]},
             "optional_fields": {
                 "type": "list",
                 "elements": "str",
@@ -1596,11 +1500,7 @@ def main():
                 ],
             },
             "prefix": {"type": "str"},
-            "schedule_frequency": {
-                "type": "str",
-                "choices": ["Daily", "Weekly"],
-                "required": True,
-            },
+            "schedule_frequency": {"type": "str", "choices": ["Daily", "Weekly"]},
         },
     }
     argument_spec["lifecycle_configuration"] = {
@@ -1612,9 +1512,7 @@ def main():
                 "options": {
                     "abort_incomplete_multipart_upload": {
                         "type": "dict",
-                        "options": {
-                            "days_after_initiation": {"type": "int", "required": True}
-                        },
+                        "options": {"days_after_initiation": {"type": "int"}},
                     },
                     "expiration_date": {"type": "str"},
                     "expiration_in_days": {"type": "int"},
@@ -1624,7 +1522,7 @@ def main():
                     "noncurrent_version_expiration": {
                         "type": "dict",
                         "options": {
-                            "noncurrent_days": {"type": "int", "required": True},
+                            "noncurrent_days": {"type": "int"},
                             "newer_noncurrent_versions": {"type": "int"},
                         },
                     },
@@ -1642,9 +1540,8 @@ def main():
                                     "ONEZONE_IA",
                                     "STANDARD_IA",
                                 ],
-                                "required": True,
                             },
-                            "transition_in_days": {"type": "int", "required": True},
+                            "transition_in_days": {"type": "int"},
                             "newer_noncurrent_versions": {"type": "int"},
                         },
                     },
@@ -1663,25 +1560,17 @@ def main():
                                     "ONEZONE_IA",
                                     "STANDARD_IA",
                                 ],
-                                "required": True,
                             },
-                            "transition_in_days": {"type": "int", "required": True},
+                            "transition_in_days": {"type": "int"},
                             "newer_noncurrent_versions": {"type": "int"},
                         },
                     },
                     "prefix": {"type": "str"},
-                    "status": {
-                        "type": "str",
-                        "choices": ["Disabled", "Enabled"],
-                        "required": True,
-                    },
+                    "status": {"type": "str", "choices": ["Disabled", "Enabled"]},
                     "tag_filters": {
                         "type": "list",
                         "elements": "dict",
-                        "options": {
-                            "value": {"type": "str", "required": True},
-                            "key": {"type": "str", "required": True},
-                        },
+                        "options": {"value": {"type": "str"}, "key": {"type": "str"}},
                     },
                     "object_size_greater_than": {"type": "str"},
                     "object_size_less_than": {"type": "str"},
@@ -1699,7 +1588,6 @@ def main():
                                     "ONEZONE_IA",
                                     "STANDARD_IA",
                                 ],
-                                "required": True,
                             },
                             "transition_date": {"type": "str"},
                             "transition_in_days": {"type": "int"},
@@ -1720,7 +1608,6 @@ def main():
                                     "ONEZONE_IA",
                                     "STANDARD_IA",
                                 ],
-                                "required": True,
                             },
                             "transition_date": {"type": "str"},
                             "transition_in_days": {"type": "int"},
@@ -1742,15 +1629,12 @@ def main():
         "elements": "dict",
         "options": {
             "access_point_arn": {"type": "str"},
-            "id": {"type": "str", "required": True},
+            "id": {"type": "str"},
             "prefix": {"type": "str"},
             "tag_filters": {
                 "type": "list",
                 "elements": "dict",
-                "options": {
-                    "value": {"type": "str", "required": True},
-                    "key": {"type": "str", "required": True},
-                },
+                "options": {"value": {"type": "str"}, "key": {"type": "str"}},
             },
         },
     }
@@ -1767,81 +1651,78 @@ def main():
                 "type": "list",
                 "elements": "dict",
                 "options": {
-                    "event": {"type": "str", "required": True},
+                    "event": {"type": "str"},
                     "filter": {
                         "type": "dict",
                         "options": {
                             "s3_key": {
                                 "type": "dict",
-                                "required": True,
                                 "options": {
                                     "rules": {
                                         "type": "list",
                                         "elements": "dict",
                                         "options": {
-                                            "name": {"type": "str", "required": True},
-                                            "value": {"type": "str", "required": True},
+                                            "name": {"type": "str"},
+                                            "value": {"type": "str"},
                                         },
                                     }
                                 },
                             }
                         },
                     },
-                    "function": {"type": "str", "required": True},
+                    "function": {"type": "str"},
                 },
             },
             "queue_configurations": {
                 "type": "list",
                 "elements": "dict",
                 "options": {
-                    "event": {"type": "str", "required": True},
+                    "event": {"type": "str"},
                     "filter": {
                         "type": "dict",
                         "options": {
                             "s3_key": {
                                 "type": "dict",
-                                "required": True,
                                 "options": {
                                     "rules": {
                                         "type": "list",
                                         "elements": "dict",
                                         "options": {
-                                            "name": {"type": "str", "required": True},
-                                            "value": {"type": "str", "required": True},
+                                            "name": {"type": "str"},
+                                            "value": {"type": "str"},
                                         },
                                     }
                                 },
                             }
                         },
                     },
-                    "queue": {"type": "str", "required": True},
+                    "queue": {"type": "str"},
                 },
             },
             "topic_configurations": {
                 "type": "list",
                 "elements": "dict",
                 "options": {
-                    "event": {"type": "str", "required": True},
+                    "event": {"type": "str"},
                     "filter": {
                         "type": "dict",
                         "options": {
                             "s3_key": {
                                 "type": "dict",
-                                "required": True,
                                 "options": {
                                     "rules": {
                                         "type": "list",
                                         "elements": "dict",
                                         "options": {
-                                            "name": {"type": "str", "required": True},
-                                            "value": {"type": "str", "required": True},
+                                            "name": {"type": "str"},
+                                            "value": {"type": "str"},
                                         },
                                     }
                                 },
                             }
                         },
                     },
-                    "topic": {"type": "str", "required": True},
+                    "topic": {"type": "str"},
                 },
             },
         },
@@ -1874,7 +1755,6 @@ def main():
         "options": {
             "rules": {
                 "type": "list",
-                "required": True,
                 "elements": "dict",
                 "options": {
                     "object_ownership": {
@@ -1901,7 +1781,7 @@ def main():
     argument_spec["replication_configuration"] = {
         "type": "dict",
         "options": {
-            "role": {"type": "str", "required": True},
+            "role": {"type": "str"},
             "rules": {
                 "type": "list",
                 "elements": "dict",
@@ -1917,7 +1797,6 @@ def main():
                     },
                     "destination": {
                         "type": "dict",
-                        "required": True,
                         "options": {
                             "access_control_translation": {
                                 "type": "dict",
@@ -1929,26 +1808,18 @@ def main():
                             "bucket": {"type": "str"},
                             "encryption_configuration": {
                                 "type": "dict",
-                                "options": {
-                                    "replica_kms_key_id": {
-                                        "type": "str",
-                                        "required": True,
-                                    }
-                                },
+                                "options": {"replica_kms_key_id": {"type": "str"}},
                             },
                             "metrics": {
                                 "type": "dict",
                                 "options": {
                                     "event_threshold": {
                                         "type": "dict",
-                                        "options": {
-                                            "minutes": {"type": "int", "required": True}
-                                        },
+                                        "options": {"minutes": {"type": "int"}},
                                     },
                                     "status": {
                                         "type": "str",
                                         "choices": ["Disabled", "Enabled"],
-                                        "required": True,
                                     },
                                 },
                             },
@@ -1958,14 +1829,10 @@ def main():
                                     "status": {
                                         "type": "str",
                                         "choices": ["Disabled", "Enabled"],
-                                        "required": True,
                                     },
                                     "time": {
                                         "type": "dict",
-                                        "required": True,
-                                        "options": {
-                                            "minutes": {"type": "int", "required": True}
-                                        },
+                                        "options": {"minutes": {"type": "int"}},
                                     },
                                 },
                             },
@@ -1995,8 +1862,8 @@ def main():
                                         "type": "list",
                                         "elements": "dict",
                                         "options": {
-                                            "value": {"type": "str", "required": True},
-                                            "key": {"type": "str", "required": True},
+                                            "value": {"type": "str"},
+                                            "key": {"type": "str"},
                                         },
                                     },
                                 },
@@ -2005,8 +1872,8 @@ def main():
                             "tag_filter": {
                                 "type": "dict",
                                 "options": {
-                                    "value": {"type": "str", "required": True},
-                                    "key": {"type": "str", "required": True},
+                                    "value": {"type": "str"},
+                                    "key": {"type": "str"},
                                 },
                             },
                         },
@@ -2023,7 +1890,6 @@ def main():
                                     "status": {
                                         "type": "str",
                                         "choices": ["Disabled", "Enabled"],
-                                        "required": True,
                                     }
                                 },
                             },
@@ -2033,17 +1899,12 @@ def main():
                                     "status": {
                                         "type": "str",
                                         "choices": ["Disabled", "Enabled"],
-                                        "required": True,
                                     }
                                 },
                             },
                         },
                     },
-                    "status": {
-                        "type": "str",
-                        "choices": ["Disabled", "Enabled"],
-                        "required": True,
-                    },
+                    "status": {"type": "str", "choices": ["Disabled", "Enabled"]},
                 },
             },
         },
@@ -2081,7 +1942,6 @@ def main():
                             "replace_key_prefix_with": {"type": "str"},
                             "replace_key_with": {"type": "str"},
                         },
-                        "required": True,
                     },
                     "routing_rule_condition": {
                         "type": "dict",
@@ -2095,7 +1955,7 @@ def main():
             "redirect_all_requests_to": {
                 "type": "dict",
                 "options": {
-                    "host_name": {"type": "str", "required": True},
+                    "host_name": {"type": "str"},
                     "protocol": {"type": "str", "choices": ["http", "https"]},
                 },
             },
@@ -2110,11 +1970,7 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["bucket_name"], True],
-        ["state", "absent", ["bucket_name"], True],
-        ["state", "get", ["bucket_name"], True],
-    ]
+    required_if = [["state", "present", [], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

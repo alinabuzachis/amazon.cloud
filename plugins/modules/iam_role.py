@@ -20,7 +20,6 @@ options:
     assume_role_policy_document:
         description:
         - The trust policy that is associated with this role.
-        required: true
         type: dict
     description:
         description:
@@ -56,12 +55,10 @@ options:
             policy_document:
                 description:
                 - The policy document.
-                required: true
                 type: str
             policy_name:
                 description:
                 - The friendly name (not ARN) identifying the policy.
-                required: true
                 type: str
         type: list
     purge_tags:
@@ -73,6 +70,7 @@ options:
     role_name:
         description:
         - A name for the IAM role, up to 64 characters in length.
+        required: true
         type: str
     state:
         choices:
@@ -157,7 +155,7 @@ def main():
         ),
     )
 
-    argument_spec["assume_role_policy_document"] = {"type": "dict", "required": True}
+    argument_spec["assume_role_policy_document"] = {"type": "dict"}
     argument_spec["description"] = {"type": "str"}
     argument_spec["managed_policy_arns"] = {"type": "list", "elements": "str"}
     argument_spec["max_session_duration"] = {"type": "int"}
@@ -166,12 +164,9 @@ def main():
     argument_spec["policies"] = {
         "type": "list",
         "elements": "dict",
-        "options": {
-            "policy_document": {"type": "str", "required": True},
-            "policy_name": {"type": "str", "required": True},
-        },
+        "options": {"policy_document": {"type": "str"}, "policy_name": {"type": "str"}},
     }
-    argument_spec["role_name"] = {"type": "str"}
+    argument_spec["role_name"] = {"type": "str", "required": True}
     argument_spec["tags"] = {
         "type": "dict",
         "required": False,
@@ -186,11 +181,7 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["assume_role_policy_document", "role_name"], True],
-        ["state", "absent", ["role_name"], True],
-        ["state", "get", ["role_name"], True],
-    ]
+    required_if = [["state", "present", ["assume_role_policy_document"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

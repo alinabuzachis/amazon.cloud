@@ -15,7 +15,7 @@ DOCUMENTATION = r"""
 module: s3_multi_region_access_point_policy
 short_description: Manage Amazon S3 access policies
 description: Applie and manage Amazon S3 access policies to an Amazon S3 Multi-Region
-    Access Points.
+    Access Points (list, create, update, describe, delete).
 options:
     mrap_name:
         description:
@@ -25,7 +25,6 @@ options:
     policy:
         description:
         - Policy document to apply to a Multi Region Access Point
-        required: true
         type: dict
     state:
         choices:
@@ -103,7 +102,7 @@ def main():
     )
 
     argument_spec["mrap_name"] = {"type": "str", "required": True}
-    argument_spec["policy"] = {"type": "dict", "required": True}
+    argument_spec["policy"] = {"type": "dict"}
     argument_spec["state"] = {
         "type": "str",
         "choices": ["present", "absent", "list", "describe", "get"],
@@ -112,11 +111,7 @@ def main():
     argument_spec["wait"] = {"type": "bool", "default": False}
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
 
-    required_if = [
-        ["state", "present", ["mrap_name", "policy"], True],
-        ["state", "absent", ["mrap_name"], True],
-        ["state", "get", ["mrap_name"], True],
-    ]
+    required_if = [["state", "present", ["policy"], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True

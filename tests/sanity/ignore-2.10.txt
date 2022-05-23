@@ -202,3 +202,12 @@ plugins/modules/s3_object_lambda_access_point_policy.py metaclass-boilerplate!sk
 plugins/modules/s3_object_lambda_access_point_policy.py compile-2.6!skip
 plugins/modules/s3_object_lambda_access_point_policy.py import-2.6!skip
 plugins/modules/s3_object_lambda_access_point_policy.py validate-modules:parameter-state-invalid-choice
+plugins/modules/eks_fargate_profile.py compile-2.7!skip
+plugins/modules/eks_fargate_profile.py compile-3.5!skip
+plugins/modules/eks_fargate_profile.py import-2.7!skip
+plugins/modules/eks_fargate_profile.py import-3.5!skip
+plugins/modules/eks_fargate_profile.py future-import-boilerplate!skip
+plugins/modules/eks_fargate_profile.py metaclass-boilerplate!skip
+plugins/modules/eks_fargate_profile.py compile-2.6!skip
+plugins/modules/eks_fargate_profile.py import-2.6!skip
+plugins/modules/eks_fargate_profile.py validate-modules:parameter-state-invalid-choice

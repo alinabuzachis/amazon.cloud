@@ -25,6 +25,7 @@ options:
         - The name of the log group.
         - If you dont specify a name, AWS CloudFormation generates a unique ID for
             the log group.
+        required: true
         type: str
     purge_tags:
         default: true
@@ -139,7 +140,7 @@ def main():
         ),
     )
 
-    argument_spec["log_group_name"] = {"type": "str"}
+    argument_spec["log_group_name"] = {"type": "str", "required": True}
     argument_spec["kms_key_id"] = {"type": "str"}
     argument_spec["retention_in_days"] = {
         "type": "int",
@@ -177,11 +178,7 @@ def main():
     argument_spec["wait_timeout"] = {"type": "int", "default": 320}
     argument_spec["purge_tags"] = {"type": "bool", "required": False, "default": True}
 
-    required_if = [
-        ["state", "present", ["log_group_name"], True],
-        ["state", "absent", ["log_group_name"], True],
-        ["state", "get", ["log_group_name"], True],
-    ]
+    required_if = [["state", "present", [], True]]
 
     module = AnsibleAWSModule(
         argument_spec=argument_spec, required_if=required_if, supports_check_mode=True
