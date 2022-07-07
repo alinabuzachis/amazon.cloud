@@ -248,7 +248,8 @@ def main():
     params["report_plan_tags"] = module.params.get("report_plan_tags")
     params["report_setting"] = module.params.get("report_setting")
     params["tags"] = module.params.get("tags")
-
+    
+    # just a test
     # The DesiredState we pass to AWS must be a JSONArray of non-null values
     _params_to_set = {k: v for k, v in params.items() if v is not None}
 
