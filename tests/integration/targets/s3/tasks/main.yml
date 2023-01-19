@@ -66,9 +66,16 @@
         - docs
       ignore_errors: true
 
-    # - assert:
-    #     that:
-    #         - _result is success
+    - name: List S3 buckets
+      amazon.cloud.s3_bucket:
+        state: list
+      register: _result
+      tags:
+        - docs
+
+    - assert:
+        that:
+            - _result is success
 
     - name: Create S3 bucket - idempotence
       amazon.cloud.s3_bucket:
