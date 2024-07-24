@@ -8,6 +8,7 @@
 
 
 DOCUMENTATION = r"""
+# Test
 module: s3_bucket
 short_description: Create and manage S3 buckets
 description:
